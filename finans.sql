@@ -1,25 +1,15 @@
-
-
--- Проверить текущую базу данных
 SELECT DATABASE();
--- Таблица категорий
--- =============================================
--- 1. СОЗДАНИЕ БАЗЫ ДАННЫХ
--- =============================================
+
 CREATE DATABASE IF NOT EXISTS finance_db 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;
 
 USE finance_db;
 
--- =============================================
--- 2. УДАЛЕНИЕ СТАРОЙ ТАБЛИЦЫ (если есть)
--- =============================================
+
 DROP TABLE IF EXISTS transactions;
 
--- =============================================
--- 3. СОЗДАНИЕ ПРОСТОЙ ТАБЛИЦЫ ТРАНЗАКЦИЙ
--- =============================================
+
 CREATE TABLE transactions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     amount DECIMAL(10, 2) NOT NULL,
@@ -30,9 +20,6 @@ CREATE TABLE transactions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- =============================================
--- 4. ДОБАВЛЕНИЕ ТЕСТОВЫХ ДАННЫХ
--- =============================================
 
 -- Начальный баланс 10000
 INSERT INTO transactions (amount, type, category, description, date) VALUES
@@ -51,9 +38,6 @@ INSERT INTO transactions (amount, type, category, description, date) VALUES
 (2500.00, 'expense', 'Здоровье', 'Витамины и лекарства', '2026-01-30'),
 (45000.00, 'income', 'Зарплата', 'Зарплата за февраль 2026', '2026-02-15');
 
--- =============================================
--- 5. ПРОСМОТР ВСЕХ ТРАНЗАКЦИЙ
--- =============================================
 SELECT 
     id,
     DATE_FORMAT(date, '%d.%m.%Y') AS дата,
@@ -67,9 +51,6 @@ SELECT
 FROM transactions
 ORDER BY date DESC, id DESC;
 
--- =============================================
--- 6. ПРОСМОТР СТАТИСТИКИ
--- =============================================
 SELECT 
     'Общая статистика' AS показатели,
     CONCAT(FORMAT(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 2), ' ₽') AS доходы,
@@ -77,9 +58,6 @@ SELECT
     CONCAT(FORMAT(SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END), 2), ' ₽') AS баланс
 FROM transactions;
 
--- =============================================
--- 7. РАСХОДЫ ПО КАТЕГОРИЯМ
--- =============================================
 SELECT 
     category AS категория,
     COUNT(*) AS количество,
@@ -90,9 +68,6 @@ WHERE type = 'expense'
 GROUP BY category
 ORDER BY SUM(amount) DESC;
 
--- =============================================
--- 8. ДОХОДЫ ПО КАТЕГОРИЯМ
--- =============================================
 SELECT 
     category AS категория,
     COUNT(*) AS количество,
@@ -102,36 +77,6 @@ WHERE type = 'income'
 GROUP BY category
 ORDER BY SUM(amount) DESC;
 
--- =============================================
--- 9. ПОСЛЕДНИЕ 10 ТРАНЗАКЦИЙ
--- =============================================
-SELECT 
-    DATE_FORMAT(date, '%d.%m.%Y') AS дата,
-    CASE WHEN type = 'income' THEN '+' ELSE '-' END AS знак,
-    category AS категория,
-    CONCAT(FORMAT(amount, 2), ' ₽') AS сумма,
-    description AS описание
-FROM transactions
-ORDER BY date DESC, id DESC
-LIMIT 10;
-
--- =============================================
--- 10. ПРИМЕРЫ ДЛЯ ТЕСТИРОВАНИЯ
--- =============================================
-
--- Добавить новую транзакцию (пример)
--- INSERT INTO transactions (amount, type, category, description, date) 
--- VALUES (1500.00, 'expense', 'Кафе', 'Обед в кафе', CURDATE());
-
--- Удалить транзакцию по ID (пример)
--- DELETE FROM transactions WHERE id = 1;
-
--- Обновить транзакцию (пример)
--- UPDATE transactions SET description = 'Новое описание' WHERE id = 1;
-
--- =============================================
--- 11. ПРОВЕРКА ЦЕЛОСТНОСТИ ДАННЫХ
--- =============================================
 SELECT 
     'Проверка данных:' AS '',
     COUNT(*) AS всего_транзакций,
