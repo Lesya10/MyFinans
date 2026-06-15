@@ -41,7 +41,6 @@ def get_db():
     finally:
         db.close()
 
-# ==================== ДОБАВЛЕНА ФУНКЦИЯ ВАЛИДАЦИИ ====================
 def validate_transaction_data(amount, category, date, description=None):
     """Валидация данных транзакции - исправление всех ошибок"""
     
@@ -80,7 +79,6 @@ def validate_transaction_data(amount, category, date, description=None):
         raise HTTPException(status_code=400, detail="Тип транзакции должен быть 'income' или 'expense'")
     
     return True
-# ==================== КОНЕЦ ДОБАВЛЕННОЙ ФУНКЦИИ ====================
 
 HTML = """
 <!DOCTYPE html>
@@ -610,9 +608,7 @@ async def create_transaction(
         if not date:
             date = datetime.now().strftime("%Y-%m-%d")
         
-        # ==================== ДОБАВЛЕН ВЫЗОВ ВАЛИДАЦИИ ====================
         validate_transaction_data(amount, category, date, description)
-        # ==================== КОНЕЦ ДОБАВЛЕНИЯ ====================
         
         transaction = Transaction(
             amount=amount,
