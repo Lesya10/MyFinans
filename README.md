@@ -27,7 +27,7 @@
 ### Шаг 1: Клонирование репозитория
 
 ```bash
-git clone https://github.com/your-username/finance-app.git
+git clone https://github.com/Lesya10/MyFinans
 cd finance-app
 
 ### Шаг 2: установка зависимостей
